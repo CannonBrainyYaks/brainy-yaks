@@ -27,6 +27,9 @@
 .full .schedule-head h2{font-size:clamp(14px,1.45vw,24px);margin:0}
 .full #sessionCount{color:#afc6b4;font-size:clamp(11px,1vw,15px)}
 .full .all-slots{flex:1;min-height:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-template-rows:repeat(6,minmax(0,1fr));gap:5px}
+.full .afternoon .all-slots{grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:repeat(4,minmax(0,1fr))}
+.full .afternoon .display-time{font-size:clamp(15px,1.5vw,25px)}
+.full .afternoon .display-team{font-size:clamp(12px,1.25vw,21px)}
 .full .display-slot{display:flex;flex-direction:column;justify-content:center;overflow:hidden;gap:2px;padding:3px 7px;background:#24392b;border:1px solid #39513e;border-radius:7px;min-width:0}
 .full .display-time{font-size:clamp(12px,1.15vw,20px);font-weight:850;white-space:nowrap}
 .full .display-team{font-size:clamp(10px,1vw,17px);overflow:hidden;white-space:nowrap;text-overflow:ellipsis;color:#d3e6d6}
@@ -95,6 +98,7 @@ function renderDisplay(){
  const one=Date.parse('2026-11-22T13:00:00-05:00');
  const closing=Date.parse('2026-11-22T15:00:00-05:00');
  const afternoon=now>=noon;
+ $('tableView').classList.toggle('afternoon',afternoon);
  const lunch=now>=noon&&now<one;
  const after=now>=closing;
  const sessionSlots=slots.filter(s=>{const t=new Date(s.starts_at).getTime();return afternoon?t>=one:t<noon});
