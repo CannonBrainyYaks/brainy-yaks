@@ -33,6 +33,9 @@
 .full .display-slot{display:flex;flex-direction:column;justify-content:center;overflow:hidden;gap:2px;padding:3px 7px;background:#24392b;border:1px solid #39513e;border-radius:7px;min-width:0}
 .full .display-time{font-size:clamp(12px,1.15vw,20px);font-weight:850;white-space:nowrap}
 .full .display-team{font-size:clamp(10px,1vw,17px);overflow:hidden;white-space:nowrap;text-overflow:ellipsis;color:#d3e6d6}
+.full .display-slot.booked{background:#624019;border:1px solid #f0ad45}
+.full .display-slot.booked .display-team{color:#ffde9e;font-weight:750}
+.full .display-slot.closed{background:#28302b;color:#9eaba1}
 .full .display-slot.available{border-color:#5f8e65}
 .full .display-slot.available .display-team{color:#b5eb78;font-weight:800}
 .full .display-slot.finished{opacity:.48}
@@ -44,6 +47,12 @@
 .full #qrLink{font-size:clamp(10px,.9vw,14px);overflow-wrap:anywhere}
 @media(max-width:850px){.full .wrap{padding:8px;gap:6px}.full .top .muted{display:none}.full .display-grid{grid-template-columns:minmax(0,1fr) 145px;gap:5px}.full .qr img{width:120px}.full .all-slots{gap:3px}.full .display-slot{padding:2px 4px}.full .display-team{font-size:10px}.full .active{padding:7px 10px}.full .countdown-box{min-width:100px}}
 @media(max-height:700px){.full .top{min-height:40px}.full .active{padding:5px 14px}.full .display-schedule{padding:6px;gap:4px}.full .all-slots{gap:3px}.full .display-slot{padding:1px 5px}.full .display-time{font-size:clamp(11px,1vw,16px)}.full .display-team{font-size:clamp(9px,.85vw,13px)}}
+
+/* Coach booking clarity */
+.slot.selected-slot{background:#364923;border:2px solid #d9ff87}
+.slot.selected-slot button{background:#d9ff87;color:#152018}
+.slot.booked-slot{background:#382d20;border-left:4px solid #efa94c}
+.slot.booked-slot small{color:#ffdc9d}
 </style></head><body>
 <div class="wrap">
 <img class="pit-banner" id="pitBanner" src="./NC%20FLL%20Practice%20Pit%20Signup.png" alt="NC FLL Practice Pit Sign Up — FIRST and BioGlow" onerror="this.hidden=true">
@@ -80,7 +89,7 @@ const setNotice=(msg,err=false)=>{$('status').className=msg?'notice '+(err?'erro
 async function rpc(name,args={}){const res=await fetch(URL_BASE+'/rest/v1/rpc/'+name,{method:'POST',headers:{apikey:KEY,'Content-Type':'application/json'},body:JSON.stringify(args)});const json=await res.json().catch(()=>null);if(!res.ok)throw Error(json?.message||'Unable to contact booking service');return json}
 function currentBooking(team){return slots.find(s=>s.team_number===team&&new Date(s.ends_at)>new Date())}
 function renderCoach(){const now=Date.now(),team=$('teamNumber').value.trim(),existing=currentBooking(team),mine=saved();$('schedule').innerHTML='';
-for(const s of slots){const item=document.createElement('div');item.className='slot';const isPast=new Date(s.starts_at).getTime()<=now;const free=!s.team_number&&s.is_open&&!isPast;
+for(const s of slots){const item=document.createElement('div');item.className='slot'+(chosen===s.slot_id?' selected-slot':s.team_number?' booked-slot':'');const isPast=new Date(s.starts_at).getTime()<=now;const free=!s.team_number&&s.is_open&&!isPast;
 item.innerHTML='<div><strong>'+escapeHTML(shortTime(s.starts_at))+'–'+escapeHTML(shortTime(s.ends_at))+'</strong><small>'+escapeHTML(s.team_number?'#'+s.team_number+' · '+s.team_name:(isPast?'Finished':s.is_open?'Available':'Closed'))+'</small></div>';
 const b=document.createElement('button');b.textContent=chosen===s.slot_id?'Selected':'Choose';b.disabled=!free||!!existing||busy;b.style.display=free?'':'none';b.onclick=()=>{chosen=s.slot_id;renderCoach()};item.append(b);$('schedule').append(item)}
 const canChoose=chosen&&slots.some(s=>s.slot_id===chosen&&!s.team_number&&s.is_open&&new Date(s.starts_at)>new Date());
@@ -117,7 +126,7 @@ function renderDisplay(){
    const isCurrent=now>=begins&&now<ends;
    const finished=now>=ends;
    const status=!s.is_open?'CLOSED':s.team_number?'#'+s.team_number+' · '+s.team_name:finished?'—':isCurrent?'TABLE AVAILABLE':'AVAILABLE';
-   const style=isCurrent?' current':finished?' finished':!s.team_number&&s.is_open?' available':'';
+   const style=isCurrent?' current':finished?' finished':s.team_number?' booked':s.is_open?' available':' closed';
    return '<div class="display-slot'+style+'"><span class="display-time">'+escapeHTML(shortTime(s.starts_at))+'</span><span class="display-team">'+escapeHTML(status)+'</span></div>'
  }).join('');
 }
