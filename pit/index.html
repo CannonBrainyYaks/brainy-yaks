@@ -2,7 +2,46 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Practice Pit Timer | Organized by Brainy Yaks</title>
 <style>
 :root{font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:#e9f6ee;background:#0c1712}*{box-sizing:border-box}body{margin:0}button,input{font:inherit}button{cursor:pointer;border:0;border-radius:10px;padding:12px 16px;font-weight:700}button:disabled{opacity:.35;cursor:not-allowed}.wrap{max-width:1160px;margin:auto;padding:20px}.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}.brand{color:#b3e37f;font-size:.78rem;letter-spacing:.12em;font-weight:800}.muted{color:#b3c7bb}.tabs{display:flex;gap:10px;margin:24px 0}.tabs a{padding:10px 16px;color:#c6e9d2;text-decoration:none;border:1px solid #496a52;border-radius:9px}.tabs .chosen{background:#b5eb78;color:#15251a}.panel{border:1px solid #385442;background:#17291e;border-radius:18px;padding:20px}.columns{display:grid;grid-template-columns:1.4fr 1fr;gap:18px}.clock{font-size:clamp(2rem,5vw,4rem);font-variant-numeric:tabular-nums;font-weight:900;line-height:1.1}.countdown{font-size:clamp(3rem,8vw,7rem);font-weight:900;font-variant-numeric:tabular-nums}.active{background:linear-gradient(130deg,#285c3a,#193625);text-align:center}.active .team{font-size:clamp(2rem,5vw,4.5rem);font-weight:900}.schedule{display:grid;gap:7px;max-height:510px;overflow:auto}.slot{display:flex;justify-content:space-between;align-items:center;background:#203327;padding:11px;border-radius:9px;gap:12px}.slot small{display:block;color:#abc1af}.slot button,.primary{background:#b5eb78;color:#172318}.slot .booked{color:#c6d5c9}.slot .gone{color:#84988a}.row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}.form input{background:#0d1d13;color:white;border:1px solid #597761;border-radius:9px;padding:13px;width:100%;margin:7px 0 14px}.notice{padding:12px;border-radius:10px;background:#2d4434;line-height:1.5}.error{background:#5d2b2b}.ok{background:#214e30}.hidden{display:none!important}.next{display:grid;gap:10px}.next .slot{font-size:1.35rem}.display-grid{display:grid;grid-template-columns:1.5fr .85fr;gap:16px}.qr{background:white;color:#14241a;border-radius:18px;padding:18px;text-align:center;display:grid;place-items:center}.qr img{max-width:100%;width:230px}.full .wrap{max-width:none;padding:2.2vw}.full .tabs{display:none}.full h1{font-size:2.5vw}.full .clock{font-size:4.5vw}.full .active{min-height:34vh;display:grid;place-content:center}.full .next .slot{font-size:2.3vw;padding:1.2vw}.full .display-grid{grid-template-columns:1.5fr .85fr}.full .qr img{width:min(20vw,280px)}.full .countdown{font-size:7vw}.footer{margin:22px 0;color:#9db4a2;font-size:.82rem}a{color:#b5eb78}#status{margin:12px 0}@media(max-width:750px){.columns,.display-grid{grid-template-columns:1fr}.full .display-grid{grid-template-columns:1fr}.full .wrap{padding:15px}.full .next .slot{font-size:1.4rem}.full h1{font-size:1.7rem}.full .clock{font-size:2.5rem}.full .qr img{width:220px}}
-.pit-banner{display:block;width:100%;height:auto;max-height:340px;object-fit:contain;border-radius:14px;border:1px solid #385442;background:#07180e;margin:0 0 16px}.pit-banner[hidden]{display:none}</style></head><body>
+.pit-banner{display:block;width:100%;height:auto;max-height:340px;object-fit:contain;border-radius:14px;border:1px solid #385442;background:#07180e;margin:0 0 16px}.pit-banner[hidden]{display:none}
+/* Full-screen tournament table board: 24 morning slots or 12 afternoon slots, no scrolling */
+.full{height:100dvh;overflow:hidden}
+.full .wrap{height:100dvh;display:flex;flex-direction:column;max-width:none;padding:12px 18px;gap:9px}
+.full .pit-banner,.full .footer,.full .tabs{display:none!important}
+.full .top{flex:none;min-height:65px;gap:12px}
+.full .top h1{font-size:clamp(19px,2vw,33px);margin:3px 0}
+.full .top .muted{font-size:clamp(10px,.95vw,15px)}
+.full .clock{font-size:clamp(27px,3.1vw,55px)}
+.full #status:empty{display:none}
+.full #status{margin:0;padding:5px;font-size:12px}
+.full #tableView{flex:1;min-height:0;display:flex;flex-direction:column;gap:9px}
+.full .display-head{flex:none}
+.full .active{min-height:0;padding:10px 22px;display:flex;justify-content:space-between;align-items:center;text-align:left;gap:18px}
+.full .active .team{font-size:clamp(25px,3vw,50px);line-height:1.12}
+.full #activeName{font-size:clamp(13px,1.4vw,21px)}
+.full .countdown-box{text-align:center;min-width:155px}
+.full .countdown{font-size:clamp(33px,4.2vw,68px);line-height:1}
+.full .countdown-box .muted{font-size:clamp(9px,.9vw,13px)}
+.full .display-grid{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) clamp(175px,19vw,300px);gap:10px;margin-top:0!important}
+.full .display-schedule{min-height:0;padding:10px;display:flex;flex-direction:column;gap:8px}
+.full .schedule-head{display:flex;justify-content:space-between;align-items:center;gap:8px;flex:none}
+.full .schedule-head h2{font-size:clamp(14px,1.45vw,24px);margin:0}
+.full #sessionCount{color:#afc6b4;font-size:clamp(11px,1vw,15px)}
+.full .all-slots{flex:1;min-height:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-template-rows:repeat(6,minmax(0,1fr));gap:5px}
+.full .display-slot{display:flex;flex-direction:column;justify-content:center;overflow:hidden;gap:2px;padding:3px 7px;background:#24392b;border:1px solid #39513e;border-radius:7px;min-width:0}
+.full .display-time{font-size:clamp(12px,1.15vw,20px);font-weight:850;white-space:nowrap}
+.full .display-team{font-size:clamp(10px,1vw,17px);overflow:hidden;white-space:nowrap;text-overflow:ellipsis;color:#d3e6d6}
+.full .display-slot.available{border-color:#5f8e65}
+.full .display-slot.available .display-team{color:#b5eb78;font-weight:800}
+.full .display-slot.finished{opacity:.48}
+.full .display-slot.current{background:#386f42;border:2px solid #b5eb78}
+.full .qr{min-height:0;padding:10px;overflow:hidden;display:grid;place-items:center}
+.full .qr h2{font-size:clamp(15px,1.4vw,24px);margin:5px 0}
+.full .qr img{width:min(100%,17vw,240px)}
+.full .qr p{font-size:clamp(12px,1.04vw,16px);margin:6px 0}
+.full #qrLink{font-size:clamp(10px,.9vw,14px);overflow-wrap:anywhere}
+@media(max-width:850px){.full .wrap{padding:8px;gap:6px}.full .top .muted{display:none}.full .display-grid{grid-template-columns:minmax(0,1fr) 145px;gap:5px}.full .qr img{width:120px}.full .all-slots{gap:3px}.full .display-slot{padding:2px 4px}.full .display-team{font-size:10px}.full .active{padding:7px 10px}.full .countdown-box{min-width:100px}}
+@media(max-height:700px){.full .top{min-height:40px}.full .active{padding:5px 14px}.full .display-schedule{padding:6px;gap:4px}.full .all-slots{gap:3px}.full .display-slot{padding:1px 5px}.full .display-time{font-size:clamp(11px,1vw,16px)}.full .display-team{font-size:clamp(9px,.85vw,13px)}}
+</style></head><body>
 <div class="wrap">
 <img class="pit-banner" id="pitBanner" src="./NC%20FLL%20Practice%20Pit%20Signup.png" alt="NC FLL Practice Pit Sign Up — FIRST and BioGlow" onerror="this.hidden=true">
 <header class="top"><div><div class="brand">FLL TOURNAMENT · HOSTED BY BRAINY YAKS</div><h1>Practice Pit Timer · Table 1</h1><div class="muted">Sunday, November 22, 2026 · 8:00 AM–3:00 PM · Lunch 12:00–1:00</div></div><div><div class="muted">TOURNAMENT CLOCK · ET</div><div id="clock" class="clock">--:--:--</div></div></header>
@@ -13,8 +52,16 @@
 <div class="panel form"><h2>Reserve a practice</h2><label for="teamNumber">Team number</label><input id="teamNumber" inputmode="numeric" pattern="[0-9]*" maxlength="10" placeholder="6767"><label for="teamName">Team name</label><input id="teamName" maxlength="80" placeholder="Flaming Bananas"><div id="existing"></div><p id="choice" class="notice">Select an available time from the schedule.</p><button id="reserve" class="primary" disabled>Confirm reservation</button><p class="muted">No account needed. Keep this page on your phone to cancel your reservation if plans change.</p></div>
 </section>
 <section id="tableView" class="hidden">
-<div class="panel active"><div class="brand" id="activityLabel">NOW PRACTICING</div><div id="activeTeam" class="team">Checking schedule…</div><div id="activeName" style="font-size:1.6rem"></div><div id="countdown" class="countdown">--:--</div><div class="muted" id="countdownLabel">TIME REMAINING</div></div>
-<div class="display-grid" style="margin-top:16px"><div class="panel"><h2>Up next</h2><div id="upnext" class="next"></div></div><div class="qr"><div><h2>SCAN TO SIGN UP</h2><img id="qr" alt="QR code for coach signup"><p>Reserve your next 10-minute practice</p><div id="qrLink"></div></div></div></div>
+<div class="display-head">
+  <div class="panel active">
+    <div><div class="brand" id="activityLabel">NOW PRACTICING</div><div id="activeTeam" class="team">Checking schedule…</div><div id="activeName"></div></div>
+    <div class="countdown-box"><div id="countdown" class="countdown">--:--</div><div class="muted" id="countdownLabel">TIME REMAINING</div></div>
+  </div>
+</div>
+<div class="display-grid">
+  <div class="panel display-schedule"><div class="schedule-head"><h2 id="sessionTitle">MORNING PRACTICE · 8:00 AM–12:00 PM</h2><span id="sessionCount">24 slots</span></div><div id="allSlots" class="all-slots"></div></div>
+  <div class="qr"><div><h2>SCAN TO SIGN UP</h2><img id="qr" alt="QR code for coach signup"><p>Reserve your next 10-minute practice</p><div id="qrLink"></div></div></div>
+</div>
 </section><div class="footer">Practice Pit Timer · Hosted by Brainy Yaks · Live updates every 5 seconds · Eastern Time</div></div>
 <script>
 const URL_BASE='https://zsduepkuqukltjmvqjyi.supabase.co';
@@ -42,10 +89,35 @@ if(mine&&mine.slot_id===existing.slot_id&&mine.team_number===team){const button=
 async function reserve(){if(busy)return;const team=$('teamNumber').value.trim(),name=$('teamName').value.trim();if(!chosen||!/^\d{1,10}$/.test(team)||!name)return;busy=true;$('reserve').disabled=true;
 try{const row=(await rpc('pit_reserve',{p_slot_id:chosen,p_team_number:team,p_team_name:name}))[0];if(!row)throw Error('Reservation did not complete');localStorage.setItem(todayKey,JSON.stringify({id:row.reservation_id,token:row.cancel_token,slot_id:chosen,team_number:team}));chosen=null;setNotice('Confirmed! Your team is booked. Keep this page open to manage the reservation.');await refresh()}catch(e){setNotice(e.message,true)}finally{busy=false;renderCoach()}}
 async function cancelMine(){const mine=saved();if(!mine||!confirm('Cancel your practice reservation?'))return;try{const ok=await rpc('pit_cancel',{p_reservation_id:mine.id,p_cancel_token:mine.token});if(!ok)throw Error('Could not cancel this reservation');localStorage.removeItem(todayKey);chosen=null;setNotice('Reservation cancelled. You can book a new slot.');await refresh()}catch(e){setNotice(e.message,true)}}
-function renderDisplay(){const now=Date.now();const active=slots.find(s=>new Date(s.starts_at).getTime()<=now&&new Date(s.ends_at).getTime()>now);const openNext=slots.filter(s=>new Date(s.starts_at).getTime()>now).slice(0,3);const lunch=now>=Date.parse('2026-11-22T12:00:00-05:00')&&now<Date.parse('2026-11-22T13:00:00-05:00');const after=now>=Date.parse('2026-11-22T15:00:00-05:00');
-$('activityLabel').textContent=lunch?'LUNCH BREAK':after?'PRACTICE CLOSED':active?'NOW PRACTICING':'TABLE STATUS';$('activeTeam').textContent=lunch?'Back at 1:00 PM':after?'Thanks, teams!':active?(active.team_number?'TEAM '+active.team_number:'TABLE AVAILABLE'):'TABLE AVAILABLE';
-$('activeName').textContent=active?.team_name||'';const ms=active?new Date(active.ends_at).getTime()-now:0;$('countdown').textContent=active?String(Math.floor(ms/60000)).padStart(2,'0')+':'+String(Math.floor(ms%60000/1000)).padStart(2,'0'):'--:--';$('countdown').style.color=ms>0&&ms<60000?'#f6d870':'white';$('countdownLabel').textContent=active?'TIME REMAINING':'10-MINUTE PRACTICE SLOTS';
-$('upnext').innerHTML=openNext.length?openNext.map(s=>'<div class="slot"><strong>'+escapeHTML(shortTime(s.starts_at))+'</strong><span>'+escapeHTML(s.team_number?'#'+s.team_number+' · '+s.team_name:s.is_open?'AVAILABLE':'CLOSED')+'</span></div>').join(''):'<div class="notice">No more practice slots scheduled.</div>'}
+function renderDisplay(){
+ const now=Date.now();
+ const noon=Date.parse('2026-11-22T12:00:00-05:00');
+ const one=Date.parse('2026-11-22T13:00:00-05:00');
+ const closing=Date.parse('2026-11-22T15:00:00-05:00');
+ const afternoon=now>=noon;
+ const lunch=now>=noon&&now<one;
+ const after=now>=closing;
+ const sessionSlots=slots.filter(s=>{const t=new Date(s.starts_at).getTime();return afternoon?t>=one:t<noon});
+ const active=slots.find(s=>new Date(s.starts_at).getTime()<=now&&new Date(s.ends_at).getTime()>now);
+ $('sessionTitle').textContent=afternoon?'AFTERNOON PRACTICE · 1:00–3:00 PM':'MORNING PRACTICE · 8:00 AM–12:00 PM';
+ $('sessionCount').textContent=sessionSlots.length+' slots';
+ $('activityLabel').textContent=lunch?'LUNCH BREAK':after?'PRACTICE CLOSED':active?'NOW PRACTICING':'TABLE STATUS';
+ $('activeTeam').textContent=lunch?'Back at 1:00 PM':after?'Thanks, teams!':active?(active.team_number?'TEAM '+active.team_number:'TABLE AVAILABLE'):'TABLE AVAILABLE';
+ $('activeName').textContent=!lunch&&!after&&active?.team_name||'';
+ const ms=active&&!lunch&&!after?Math.max(0,new Date(active.ends_at).getTime()-now):0;
+ $('countdown').textContent=active&&!lunch&&!after?String(Math.floor(ms/60000)).padStart(2,'0')+':'+String(Math.floor(ms%60000/1000)).padStart(2,'0'):'--:--';
+ $('countdown').style.color=ms>0&&ms<=60000?'#f6d870':'white';
+ $('countdownLabel').textContent=lunch?'PRACTICE RESUMES AT 1:00':active&&!after?'TIME REMAINING':'10-MINUTE PRACTICE SLOTS';
+ $('allSlots').innerHTML=sessionSlots.map(s=>{
+   const begins=new Date(s.starts_at).getTime(),ends=new Date(s.ends_at).getTime();
+   const isCurrent=now>=begins&&now<ends;
+   const finished=now>=ends;
+   const status=!s.is_open?'CLOSED':s.team_number?'#'+s.team_number+' · '+s.team_name:finished?'—':isCurrent?'TABLE AVAILABLE':'AVAILABLE';
+   const style=isCurrent?' current':finished?' finished':!s.team_number&&s.is_open?' available':'';
+   return '<div class="display-slot'+style+'"><span class="display-time">'+escapeHTML(shortTime(s.starts_at))+'</span><span class="display-team">'+escapeHTML(status)+'</span></div>'
+ }).join('');
+}
+
 async function refresh(){try{const r=await rpc('pit_schedule');slots=r||[];lastRefresh=Date.now();setNotice('');if(DISPLAY)renderDisplay();else renderCoach()}catch(e){setNotice('Connection issue: '+e.message+'. Retrying automatically.',true)}}
 function tick(){$('clock').textContent=clockTime(new Date());if(DISPLAY)renderDisplay();else if(slots.length)renderCoach()}
 if(DISPLAY){document.body.classList.add('full');$('coach').classList.add('hidden');$('tableView').classList.remove('hidden');$('displayLink').classList.add('chosen')}else $('signupLink').classList.add('chosen');
